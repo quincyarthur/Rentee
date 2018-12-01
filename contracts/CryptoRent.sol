@@ -1,8 +1,6 @@
 pragma solidity ^0.4.0 ;
 
 contract CryptoRent {
-
-    
     struct Apartment {
         address landlord;
         uint num_rooms;
@@ -40,9 +38,9 @@ contract CryptoRent {
         uid = 0;
     }
     
-    function createApartment(address _landlord,uint _num_rooms,uint _num_bathrooms,uint _sq_ft, uint _mthly_amt,string _url, string _location,uint _deposit) {
+    function createApartment(uint _num_rooms,uint _num_bathrooms,uint _sq_ft, uint _mthly_amt,string _url, string _location,uint _deposit) {
         Apartment storage apartment;
-        apartment.landlord = _landlord;
+        apartment.landlord = msg.sender;
         apartment.num_rooms =  _num_rooms;
         apartment.num_bathrooms = _num_bathrooms;
         apartment.num_square_feet = _sq_ft;
@@ -52,7 +50,7 @@ contract CryptoRent {
         apartment.deposit = _deposit;
         apartment.rented = false;
         
-        landlords[_landlord][uid] = apartment;
+        landlords[msg.sender][uid] = apartment;
         apartments[uid] = apartment;
         emit ApartmentCreated(uid);
         uid++;
@@ -90,17 +88,17 @@ contract CryptoRent {
         lease.start_date = _start_date;
         lease.end_date = _end_date;
         lease.num_payments = _num_payments;
-        lease.tenant = _tenant;
+        lease.tenant = msg.sender;
         
         leases[_apartment_id] = lease;
         apartments[_apartment_id].rented = true;
-        renters[_tenant] = _apartment_id;
+        renters[msg.sender] = _apartment_id;
         
-        emit SignedLease(_apartment_id, _tenant);
+        emit SignedLease(_apartment_id, msg.sender);
     }
     
-    function expireLease(uint _apartment_id, address _tenant){
+    function expireLease(uint _apartment_id){
         apartments[_apartment_id].rented = false;
-        emit ReleaseLease(_apartment_id, _tenant);
+        emit ReleaseLease(_apartment_id, leases[_apartment_id].tenant);
     }
 }
