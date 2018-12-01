@@ -1,6 +1,12 @@
 pragma solidity ^0.4.0 ;
 
 contract CryptoRent {
+
+    struct Landlord{
+        string fname;
+        string lname;
+    }
+    
     struct Apartment {
         address landlord;
         uint num_rooms;
@@ -64,6 +70,34 @@ contract CryptoRent {
     function getTenant(uint _apartment_id) public returns (address){
         require(apartments[_apartment_id].rented, "This apartment has not yet been rented");
         return leases[_apartment_id].tenant;
+    }
+    
+    function getNumRooms(uint _apartment_id) returns (uint){
+        return apartments[_apartment_id].num_rooms;
+    }
+    
+    function getNumBathrooms(uint _apartment_id) returns (uint){
+        return apartments[_apartment_id].num_bathrooms;
+    }
+    
+    function getNumSqFt(uint _apartment_id) returns (uint){
+        return apartments[_apartment_id].num_square_feet;
+    }
+    
+    function getDeposit(uint _apartment_id) returns (uint){
+        return apartments[_apartment_id].deposit;
+    }
+    
+    function getLocation(uint _apartment_id) returns (string){
+        return apartments[_apartment_id].location;
+    }
+    
+    function getURL(uint _apartment_id) returns (string){
+        return apartments[_apartment_id].url;
+    }
+    
+    function isRented(uint _apartment_id) returns (bool){
+        return apartments[_apartment_id].rented;
     }
     
     function getMonthlyAmt(uint _apartment_id) returns (uint){
