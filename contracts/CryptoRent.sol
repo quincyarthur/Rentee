@@ -59,7 +59,7 @@ contract CryptoRent {
         landlords[msg.sender][uid] = apartment;
         apartments[uid] = apartment;
         emit ApartmentCreated(uid);
-        uid++;
+        uid =  uid + 1;
         
     }
     
@@ -70,6 +70,10 @@ contract CryptoRent {
     function getTenant(uint _apartment_id) public returns (address){
         require(apartments[_apartment_id].rented, "This apartment has not yet been rented");
         return leases[_apartment_id].tenant;
+    }
+    
+    function getCountApartments() returns (uint){
+        return uid;
     }
     
     function getNumRooms(uint _apartment_id) returns (uint){
